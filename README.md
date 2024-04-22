@@ -10,6 +10,6 @@
     inviavel para mim.
 
 ## OBS 3 - Por que só tem um commit? 
-  Durante os dias em que fui desenvolvendo o projeto, e s[o fazi o commit ao final do dia, com isso me atrapalhei, criei uma nova pasta e coloquei os arquivos funcionais.
+  Durante os dias em que fui desenvolvendo o projeto, e só fazia o commit ao final do dia, com isso me atrapalhei. Com isso criei uma nova pasta e coloquei os arquivos funcionais.
     Mas basicamente foram 2 commits, 1 para app-user e 1 para app-integration(que ficou incompleto)
 
