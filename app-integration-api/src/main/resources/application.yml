@@ -1,0 +1,11 @@
+spring:
+    application:
+        name: integrationApi
+
+    datasource:
+        url: jdbc:postgresql://localhost:5432/DB-Bootcamp
+        username: Bootcamp
+        password: 1234
+
+server:
+    port: 8082

@@ -1,0 +1,16 @@
+spring:
+    application:
+        name: Bootcamp Sysmap 2024 - Bruno Oliveira
+
+    datasource:
+        url: jdbc:postgresql://localhost:5432/DB-Bootcamp
+        username: Bootcamp
+        password: 1234
+
+server:
+    port: 8081
+
+api:
+    security:
+        token:
+            secret: ${JWT_SECRET:my-secret}
