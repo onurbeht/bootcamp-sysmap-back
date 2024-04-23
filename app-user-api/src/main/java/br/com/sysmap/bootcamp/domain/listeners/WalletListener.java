@@ -4,7 +4,6 @@ package br.com.sysmap.bootcamp.domain.listeners;
 
 import br.com.sysmap.bootcamp.domain.dtos.wallet.WalletDTO;
 import br.com.sysmap.bootcamp.domain.services.WalletService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
