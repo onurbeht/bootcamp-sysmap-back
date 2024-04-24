@@ -23,7 +23,7 @@ public class SecurityConfiguration {
     SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return
                 http.csrf(csrf -> csrf.disable())
                         //Define the session as Stateless
@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                         .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers(HttpMethod.POST, "api/users/auth").permitAll()
                                 .requestMatchers(HttpMethod.POST, "api/users/create").permitAll()
-                                .requestMatchers("/swagger-ui.html").permitAll()
+                                .requestMatchers("/swagger-ui/index.html").permitAll()
                                 .anyRequest().authenticated())
                         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                         .build();

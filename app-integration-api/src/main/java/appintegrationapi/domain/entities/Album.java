@@ -6,33 +6,32 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "ALBUM")
+@Table(name = "albums")
 @Getter
 @Setter
 public class Album {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "id")
     private String id;
 
-    @Column(name = "NAME")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "ID_SPOTIFY")
+    @Column(name = "id_spotify")
     private String idSpotify;
 
-    @Column(name = "ARTIST_NAME")
+    @Column(name = "artist_name")
     private String artistName;
 
-    @Column(name = "IMAGE_URL")
+    @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "VALUE")
+    @Column(name = "value")
     private Double value;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_USER")
+    @Column(name = "id_users")
     private User user;
 
 }
