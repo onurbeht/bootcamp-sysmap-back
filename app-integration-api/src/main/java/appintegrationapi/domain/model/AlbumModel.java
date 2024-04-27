@@ -14,7 +14,10 @@ public class AlbumModel {
     private ExternalUrl externalUrl;
     private String id;
     private Image[] images;
+    private String name;
     private String releaseDate;
     private ModelObjectType type;
     private Double value;
 }
+
+

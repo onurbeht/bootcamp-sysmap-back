@@ -19,14 +19,16 @@ public class SpotifyApiIntegration {
             .setClientSecret("88360719f02347be87b0db5a95422a10")
             .build();
 
-    public List<AlbumModel> getAlbums(String search) throws IOException, ParseException, SpotifyWebApiException {
 
+    public List<AlbumModel> getAlbums(String search) throws IOException, ParseException, SpotifyWebApiException {
         spotifyApi.setAccessToken(getToken());
-        return AlbumMapper.INSTANCE.toAlbum(spotifyApi.searchAlbums(search).market(CountryCode.BR)
+
+        return AlbumMapper.INSTANCE.toModel(spotifyApi.searchAlbums(search).market(CountryCode.BR)
                         .limit(30)
                         .build().execute().getItems()).stream()
-                .peek(album -> album.setValue((double) Math.toIntExact((long) (Math.random() * 100)))).toList();
-
+                        .peek(album -> {
+                            album.setValue((double) Math.toIntExact((long) (Math.random() * 100)));
+                        }).toList();
     }
 
     public String getToken() throws IOException, ParseException, SpotifyWebApiException {

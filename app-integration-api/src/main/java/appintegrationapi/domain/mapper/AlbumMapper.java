@@ -14,5 +14,5 @@ public interface AlbumMapper {
 
     AlbumMapper INSTANCE = Mappers.getMapper(AlbumMapper.class);
 
-    List<AlbumModel> toAlbum(AlbumSimplified[] albumSimplifiedPaging);
+    List<AlbumModel> toModel(AlbumSimplified[] albumSimplifiedPaging);
 }

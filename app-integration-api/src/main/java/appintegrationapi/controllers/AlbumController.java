@@ -1,9 +1,10 @@
 package appintegrationapi.controllers;
 
+import appintegrationapi.domain.dtos.AlbumDTO;
 import appintegrationapi.domain.entities.Album;
 import appintegrationapi.domain.model.AlbumModel;
 import appintegrationapi.domain.services.AlbumService;
-import appintegrationapi.domain.services.SpotifyApiIntegration;
+import jakarta.transaction.Transactional;
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +24,15 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
-
+//List<AlbumModel>
     @GetMapping("/all")
-    public ResponseEntity<List<AlbumModel>> getAlbums(@RequestParam("search") String search) throws IOException, ParseException, SpotifyWebApiException {
+    public ResponseEntity<?> getAlbums(@RequestParam("search") String search) throws IOException, ParseException, SpotifyWebApiException {
         return ResponseEntity.ok(albumService.getAlbums(search));
     }
 
+    @Transactional
     @PostMapping("/sale")
-    public ResponseEntity<Album> saveAlbum(@RequestBody Album album) {
+    public ResponseEntity<Album> saveAlbum(@RequestBody AlbumDTO album) {
         return ResponseEntity.ok(albumService.saveAlbum(album));
     }
 

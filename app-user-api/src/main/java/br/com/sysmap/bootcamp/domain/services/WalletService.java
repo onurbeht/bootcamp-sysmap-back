@@ -2,8 +2,8 @@ package br.com.sysmap.bootcamp.domain.services;
 
 import br.com.sysmap.bootcamp.domain.dtos.wallet.WalletDTO;
 import br.com.sysmap.bootcamp.domain.entities.Wallet;
+import br.com.sysmap.bootcamp.domain.exceptions.InsufficientFundsException;
 import br.com.sysmap.bootcamp.domain.repository.WalletRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,11 +46,15 @@ public class WalletService {
 
     public Wallet debit(WalletDTO walletData) {
 
-        Wallet updatedWallet = getWallet(walletData.getEmail());
+        Wallet wallet = getWallet(walletData.getEmail());
 
-        updatedWallet.setBalance(updatedWallet.getBalance() - walletData.getValue());
+        if(wallet.getBalance() < walletData.getValue()) {
+            throw new InsufficientFundsException();
+        }
 
-        return updatedWallet;
+        wallet.setBalance(wallet.getBalance() - walletData.getValue());
+
+        return wallet;
     }
 
 }

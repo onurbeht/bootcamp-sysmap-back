@@ -10,8 +10,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -26,13 +24,10 @@ public class UserController {
     private final UserService userService;
     private final WalletService walletService;
 
-
-
     @Autowired
     public UserController(UserService userService, WalletService walletService) {
         this.userService = userService;
         this.walletService = walletService;
-
     }
 
 //GET
@@ -65,7 +60,7 @@ public class UserController {
 
 //POST
     @PostMapping("/create")
-    ResponseEntity createUser(@RequestBody @Valid CreateUserDTO userData) throws URISyntaxException {
+    ResponseEntity<?> createUser(@RequestBody @Valid CreateUserDTO userData) throws URISyntaxException {
         var possibleUser = userService.findUserByEmail(userData.email());
 
         if(possibleUser != null) {
@@ -83,7 +78,7 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    ResponseEntity login(@RequestBody @Valid AuthenticationDTO userData) {
+    ResponseEntity<String> login(@RequestBody @Valid AuthenticationDTO userData) {
 
         var token = userService.login(userData);
 

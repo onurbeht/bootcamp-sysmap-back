@@ -21,8 +21,8 @@ public class UserService {
     }
 
     public User getUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal().toString();
-        return findByEmail(username);
+        var user = (User) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        return findByEmail(user.getEmail());
     }
 }
