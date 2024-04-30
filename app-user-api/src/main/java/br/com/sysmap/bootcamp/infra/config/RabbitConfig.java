@@ -31,7 +31,7 @@ public class RabbitConfig {
     @Bean
     public SimpleMessageConverter converter() {
         SimpleMessageConverter converter = new SimpleMessageConverter();
-        converter.setAllowedListPatterns(List.of("br.com.sysmap.bootcamp.domain.dto.*", "java.util.*"));
+        converter.setAllowedListPatterns(List.of("br.com.sysmap.bootcamp.domain.dtos.wallet.*", "java.util.*"));
         return converter;
     }
 

@@ -4,6 +4,7 @@ import br.com.sysmap.bootcamp.domain.dtos.wallet.WalletDTO;
 import br.com.sysmap.bootcamp.domain.entities.Wallet;
 import br.com.sysmap.bootcamp.domain.exceptions.InsufficientFundsException;
 import br.com.sysmap.bootcamp.domain.repository.WalletRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,17 +45,18 @@ public class WalletService {
         return updatedWallet;
     }
 
-    public Wallet debit(WalletDTO walletData) {
+    @Transactional
+    public void debit(WalletDTO walletData) {
 
         Wallet wallet = getWallet(walletData.getEmail());
 
-        if(wallet.getBalance() < walletData.getValue()) {
-            throw new InsufficientFundsException();
-        }
+        //todo Melhorar isso para que quando lançar uma excessao, para a execução, e não salvar o album
+//        if(wallet.getBalance() < walletData.getValue()) {
+//            throw new InsufficientFundsException();
+//        }
 
         wallet.setBalance(wallet.getBalance() - walletData.getValue());
 
-        return wallet;
     }
 
 }
