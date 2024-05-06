@@ -28,7 +28,9 @@ public class SecurityConfiguration {
                         //Define the session as Stateless
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers("/swagger-ui/index.html").permitAll()
+                                .requestMatchers("/v3/api-docs/**",
+                                        "/v2/api-docs.yaml",
+                                        "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated())
                         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                         .build();
