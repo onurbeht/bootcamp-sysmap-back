@@ -31,6 +31,19 @@ public class SpotifyApiIntegration {
                         }).toList();
     }
 
+    public List<AlbumModel> getNew() throws IOException, ParseException, SpotifyWebApiException {
+        spotifyApi.setAccessToken(getToken());
+
+        return AlbumMapper.INSTANCE.toModel(spotifyApi.getListOfNewReleases()
+                        .country(CountryCode.BR)
+                        .limit(10)
+                        .build().execute().getItems()).stream()
+                .peek(album -> {
+                    album.setValue((double) Math.toIntExact((long) (Math.random() * 100)));
+                }).toList();
+    }
+
+
     public String getToken() throws IOException, ParseException, SpotifyWebApiException {
         ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials().build();
         return clientCredentialsRequest.execute().getAccessToken();

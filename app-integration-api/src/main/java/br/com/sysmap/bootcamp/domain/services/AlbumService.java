@@ -34,6 +34,10 @@ public class AlbumService {
         return spotifyApi.getAlbums(search);
     }
 
+    public List<AlbumModel> getNew() throws IOException, ParseException, SpotifyWebApiException {
+        return spotifyApi.getNew();
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     public Album saveAlbum(AlbumDTO albumData) {
 
