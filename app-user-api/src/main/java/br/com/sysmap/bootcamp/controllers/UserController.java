@@ -31,20 +31,16 @@ public class UserController {
     }
 
 //GET
-    @GetMapping("/{id}")
-    ResponseEntity<ResponseOneUserDTO> findUser(@PathVariable String id) {
+    @GetMapping("/my-user")
+    ResponseEntity<ResponseOneUserDTO> findUser() {
 
         var principal = userService.getPrincipal();
 
-        if (principal.getId().equals(id)) {
-            var user = userService.findById(id);
+        var user = userService.findById(principal.getId());
 
-            var wallet = walletService.getWallet(user.getEmail());
+        var wallet = walletService.getWallet(user.getEmail());
 
-            return ResponseEntity.ok(new ResponseOneUserDTO(user.getId(), user.getUsername(), user.getEmail(), wallet));
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(new ResponseOneUserDTO(user.getId(), user.getUsername(), user.getEmail(), wallet));
 
     }
 
