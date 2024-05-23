@@ -68,7 +68,7 @@ public class UserController {
         var wallet = walletService.getWallet(newUser.getEmail());
 
         return ResponseEntity
-                    .created(new URI("/api/users/" + newUser.getId()))
+                    .created(new URI("/api/users/my-user"))
                     .body(new ResponseOneUserDTO(newUser.getId(), newUser.getUsername(), newUser.getEmail(), wallet));
 
     }

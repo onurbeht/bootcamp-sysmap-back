@@ -92,7 +92,9 @@ public class UserService {
 
             updatedUser.setUsername(userData.username());
 
-            updatedUser.setPassword(userData.password());
+            String encryptedPassword = new BCryptPasswordEncoder().encode(userData.password());
+
+            updatedUser.setPassword(encryptedPassword);
 
             return updatedUser;
         }

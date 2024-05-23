@@ -10,6 +10,4 @@ public class BootcampSysmap2024BrunoOliveiraApplication {
 		SpringApplication.run(BootcampSysmap2024BrunoOliveiraApplication.class, args);
 	}
 
-	
-
 }

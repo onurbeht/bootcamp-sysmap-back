@@ -33,6 +33,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, "api/users/create").permitAll()
                                 .requestMatchers("/v3/api-docs/**",
                                         "/v2/api-docs.yaml",
+                                        "api/users/swagger-ui/index.html",
                                         "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated())
                         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
