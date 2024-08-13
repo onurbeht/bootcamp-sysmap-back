@@ -25,7 +25,6 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
-
     @GetMapping("/all")
     public ResponseEntity<?> getAlbums(@RequestParam("search") String search) throws IOException, ParseException, SpotifyWebApiException {
         return ResponseEntity.ok(albumService.getAlbums(search));
