@@ -5,6 +5,7 @@ import br.com.sysmap.bootcamp.domain.dtos.wallet.WalletDTO;
 import br.com.sysmap.bootcamp.domain.entities.Album;
 import br.com.sysmap.bootcamp.domain.model.AlbumModel;
 import br.com.sysmap.bootcamp.domain.repositories.AlbumRepository;
+import br.com.sysmap.bootcamp.infra.client.WalletClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.core5.http.ParseException;
@@ -28,6 +29,7 @@ public class AlbumService {
     private final SpotifyApiIntegration spotifyApi;
     private final AlbumRepository albumRepository;
     private final UserService userService;
+    private final WalletClient walletClient;
 
     public List<AlbumModel> getAlbums(String search) throws IOException, ParseException, SpotifyWebApiException {
 
@@ -39,37 +41,35 @@ public class AlbumService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Album saveAlbum(AlbumDTO albumData) {
+    public Album saveAlbum(AlbumDTO albumData, String token) {
 
-        //todo Fix this
-//        var possibleAlbum = albumRepository.findByName(
-//                albumData.name()
-//        );
+        // todo Fix this
+        // var possibleAlbum = albumRepository.findByName(
+        // albumData.name()
+        // );
 
         var currentUser = userService.getUser();
+        var userWallet = walletClient.getWalletInfo(token);
+        System.out.println(userWallet);
 
-//        if(possibleAlbum.isPresent()) {
-//            Album album = possibleAlbum.get();
-//
-//            album.setValue(albumData.value());
-//            album.setUsers(currentUser.getId());
-//
-//            WalletDTO walletDto = new WalletDTO(currentUser.getEmail(), album.getValue());
-//            template.convertAndSend(queue.getName(), walletDto);
-//
-//            return album;
-//        }
+        Album album;
 
+        if (userWallet.balance() < albumData.value()) {
+            return album = null;
+        }
 
-        Album album = new Album(albumData.name(), albumData.idSpotify(), albumData.artistsName(), albumData.images(), albumData.value(), currentUser.getId());
+        album = new Album(albumData.name(), albumData.idSpotify(), albumData.artistsName(), albumData.images(),
+                albumData.value(), currentUser.getId());
 
-        Album albumSaved = albumRepository.save(album);
+        // Album albumSaved = albumRepository.save(album);
 
-        WalletDTO walletDto = new WalletDTO(currentUser.getEmail(), albumSaved.getValue());
+        WalletDTO walletDto = new WalletDTO(currentUser.getEmail(), albumData.value());
+        // albumSaved.getValue());
         this.template.convertAndSend(queue.getName(), walletDto);
 
-        return albumSaved;
-    }
+        // return albumSaved;
 
+        return album;
+    }
 
 }

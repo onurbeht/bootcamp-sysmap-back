@@ -2,7 +2,6 @@ package br.com.sysmap.bootcamp.domain.services;
 
 import br.com.sysmap.bootcamp.domain.dtos.wallet.WalletDTO;
 import br.com.sysmap.bootcamp.domain.entities.Wallet;
-import br.com.sysmap.bootcamp.domain.exceptions.InsufficientFundsException;
 import br.com.sysmap.bootcamp.domain.repository.WalletRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +40,7 @@ public class WalletService {
         Wallet updatedWallet = getWallet(owner);
 
         updatedWallet.setBalance(updatedWallet.getBalance() + value);
+        updatedWallet.setLastUpdate(LocalDate.now());
 
         return updatedWallet;
     }
@@ -50,12 +50,8 @@ public class WalletService {
 
         Wallet wallet = getWallet(walletData.getEmail());
 
-        //todo Melhorar isso para que quando lançar uma excessao, para a execução, e não salvar o album
-//        if(wallet.getBalance() < walletData.getValue()) {
-//            throw new InsufficientFundsException();
-//        }
-
         wallet.setBalance(wallet.getBalance() - walletData.getValue());
+        wallet.setLastUpdate(LocalDate.now());
 
     }
 

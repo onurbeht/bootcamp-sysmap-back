@@ -6,10 +6,11 @@ import br.com.sysmap.bootcamp.domain.model.AlbumModel;
 import br.com.sysmap.bootcamp.domain.services.AlbumService;
 import jakarta.transaction.Transactional;
 import org.apache.hc.core5.http.ParseException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
-
 
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +27,8 @@ public class AlbumController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAlbums(@RequestParam("search") String search) throws IOException, ParseException, SpotifyWebApiException {
+    public ResponseEntity<?> getAlbums(@RequestParam("search") String search)
+            throws IOException, ParseException, SpotifyWebApiException {
         return ResponseEntity.ok(albumService.getAlbums(search));
     }
 
@@ -37,9 +39,16 @@ public class AlbumController {
 
     @Transactional
     @PostMapping("/sale")
-    public ResponseEntity<Album> saveAlbum(@RequestBody AlbumDTO album) {
-        return ResponseEntity.ok(albumService.saveAlbum(album));
-    }
+    public ResponseEntity<?> saveAlbum(@RequestBody AlbumDTO album,
+            @RequestHeader("Authorization") String authorizationHeader) {
 
+        var albumResponse = albumService.saveAlbum(album, authorizationHeader);
+
+        if (albumResponse == null)
+            return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED)
+                    .body("Insuficient founds! Check your wallet balance.");
+
+        return ResponseEntity.ok(albumResponse);
+    }
 
 }
