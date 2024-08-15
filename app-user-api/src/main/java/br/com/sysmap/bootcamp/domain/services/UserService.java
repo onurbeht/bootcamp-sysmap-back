@@ -3,6 +3,7 @@ package br.com.sysmap.bootcamp.domain.services;
 import br.com.sysmap.bootcamp.domain.dtos.user.AuthenticationDTO;
 import br.com.sysmap.bootcamp.domain.dtos.user.UpdateUserDTO;
 import br.com.sysmap.bootcamp.domain.entities.User;
+import br.com.sysmap.bootcamp.domain.entities.Wallet;
 import br.com.sysmap.bootcamp.domain.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,22 +13,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
-
 
     private final UserRepository repository;
     private final WalletService walletService;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
 
-
     @Autowired
-    UserService (UserRepository repository, WalletService walletService,TokenService tokenService, AuthenticationManager authenticationManager) {
+    UserService(UserRepository repository, WalletService walletService, TokenService tokenService,
+            AuthenticationManager authenticationManager) {
         this.repository = repository;
         this.walletService = walletService;
         this.tokenService = tokenService;
@@ -44,11 +42,14 @@ public class UserService {
 
         User newUser = new User(user.getUsername(), user.getEmail(), encryptedPassword, user.getRole());
 
+        Wallet userWallet = walletService.createWallet(newUser.getEmail());
+
+        newUser.setWallet(userWallet);
+
         var userCreated = repository.save(newUser);
 
-        walletService.createWallet(userCreated.getEmail());
-
         return userCreated;
+
     }
 
     public String login(AuthenticationDTO userData) {
@@ -65,13 +66,12 @@ public class UserService {
 
         var possibleUser = repository.findById(id);
 
-        if(possibleUser.isEmpty()) {
+        if (possibleUser.isEmpty()) {
             throw new EntityNotFoundException();
         }
 
         return possibleUser.get();
     }
-
 
     public List<User> findAll() {
 
@@ -87,7 +87,7 @@ public class UserService {
     public User update(String id, UpdateUserDTO userData) {
         var oldUser = repository.findById(id);
 
-        if(oldUser.isPresent()) {
+        if (oldUser.isPresent()) {
             User updatedUser = oldUser.get();
 
             updatedUser.setUsername(userData.username());
