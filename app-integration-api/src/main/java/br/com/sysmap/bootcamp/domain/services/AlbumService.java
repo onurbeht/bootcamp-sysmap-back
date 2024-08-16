@@ -7,7 +7,6 @@ import br.com.sysmap.bootcamp.domain.model.AlbumModel;
 import br.com.sysmap.bootcamp.domain.repositories.AlbumRepository;
 import br.com.sysmap.bootcamp.infra.client.WalletClient;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Slf4j
 @Service
 public class AlbumService {
 
@@ -43,14 +41,8 @@ public class AlbumService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Album saveAlbum(AlbumDTO albumData, String token) {
 
-        // todo Fix this
-        // var possibleAlbum = albumRepository.findByName(
-        // albumData.name()
-        // );
-
         var currentUser = userService.getUser();
         var userWallet = walletClient.getWalletInfo(token);
-        System.out.println(userWallet);
 
         Album album;
 
@@ -59,7 +51,9 @@ public class AlbumService {
         }
 
         album = new Album(albumData.name(), albumData.idSpotify(), albumData.artistsName(), albumData.images(),
-                albumData.value(), currentUser.getId());
+                albumData.value(), currentUser);
+
+        System.out.println(album);
 
         // Album albumSaved = albumRepository.save(album);
 
