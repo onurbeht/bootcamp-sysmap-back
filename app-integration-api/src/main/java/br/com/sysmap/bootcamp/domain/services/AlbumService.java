@@ -3,6 +3,7 @@ package br.com.sysmap.bootcamp.domain.services;
 import br.com.sysmap.bootcamp.domain.dtos.AlbumDTO;
 import br.com.sysmap.bootcamp.domain.dtos.wallet.WalletDTO;
 import br.com.sysmap.bootcamp.domain.entities.Album;
+import br.com.sysmap.bootcamp.domain.entities.User;
 import br.com.sysmap.bootcamp.domain.model.AlbumModel;
 import br.com.sysmap.bootcamp.domain.repositories.AlbumRepository;
 import br.com.sysmap.bootcamp.infra.client.WalletClient;
@@ -53,17 +54,20 @@ public class AlbumService {
         album = new Album(albumData.name(), albumData.idSpotify(), albumData.artistsName(), albumData.images(),
                 albumData.value(), currentUser);
 
-        System.out.println(album);
+        Album albumSaved = albumRepository.save(album);
 
-        // Album albumSaved = albumRepository.save(album);
+        WalletDTO walletDto = new WalletDTO(currentUser.getEmail(), albumSaved.getValue());
 
-        WalletDTO walletDto = new WalletDTO(currentUser.getEmail(), albumData.value());
-        // albumSaved.getValue());
         this.template.convertAndSend(queue.getName(), walletDto);
 
-        // return albumSaved;
+        return albumSaved;
 
-        return album;
+    }
+
+    public List<Album> getAlbumsByUserId() {
+        User currentUser = userService.getUser();
+
+        return albumRepository.findAllByUserId(currentUser.getId());
     }
 
 }

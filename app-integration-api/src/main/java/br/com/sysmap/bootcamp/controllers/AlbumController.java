@@ -1,18 +1,19 @@
 package br.com.sysmap.bootcamp.controllers;
 
 import br.com.sysmap.bootcamp.domain.dtos.AlbumDTO;
+import br.com.sysmap.bootcamp.domain.dtos.AlbumDTOResponse;
 import br.com.sysmap.bootcamp.domain.entities.Album;
 import br.com.sysmap.bootcamp.domain.model.AlbumModel;
 import br.com.sysmap.bootcamp.domain.services.AlbumService;
 import jakarta.transaction.Transactional;
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -35,6 +36,23 @@ public class AlbumController {
     @GetMapping("/new")
     public ResponseEntity<List<AlbumModel>> getNew() throws IOException, ParseException, SpotifyWebApiException {
         return ResponseEntity.ok(albumService.getNew());
+    }
+
+    @GetMapping("/my-albums")
+    public ResponseEntity<List<AlbumDTOResponse>> getMyAlbums() {
+        List<Album> albums = albumService.getAlbumsByUserId();
+
+        if (albums.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<AlbumDTOResponse> albumDto = new ArrayList<>(albums.stream().map(
+                album -> new AlbumDTOResponse(
+                        album.getName(), album.getIdSpotify(), album.getArtistName(), album.getImageUrl(),
+                        album.getValue()))
+                .toList());
+
+        return ResponseEntity.ok(albumDto);
     }
 
     @Transactional
