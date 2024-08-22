@@ -9,9 +9,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
@@ -28,9 +25,7 @@ public class WalletController {
         this.userService = userService;
     }
 
-//GET
-
-
+    // GET
     @GetMapping
     public ResponseEntity<Wallet> getWallet() {
 
@@ -42,14 +37,14 @@ public class WalletController {
 
     }
 
-//POST
+    // POST
     @Transactional
     @PostMapping("/credit")
     public ResponseEntity<Wallet> updateWallet(@RequestBody @Valid RequestDTO request) {
 
         User user = userService.getPrincipal();
 
-        var updatedWallet = walletService.sumValue( user.getEmail(), request.value());
+        var updatedWallet = walletService.sumValue(user.getEmail(), request.value());
 
         return ResponseEntity.ok(updatedWallet);
     }
