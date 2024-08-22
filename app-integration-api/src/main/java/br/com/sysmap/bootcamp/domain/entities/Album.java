@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -28,10 +27,10 @@ public class Album {
     @Column(name = "id_spotify")
     private String idSpotify;
 
-    @Column(name = "artist")
+    @Column(name = "artist", columnDefinition = "TEXT[]")
     private List<String> artistName = new ArrayList<>();
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", columnDefinition = "TEXT[]")
     private List<String> imageUrl = new ArrayList<>();
 
     @Column(name = "value")
@@ -44,12 +43,10 @@ public class Album {
     public Album(String name, String idSpotify, String[] artistName, String[] imageUrl, Double value, User user) {
         this.name = name;
         this.idSpotify = idSpotify;
-        this.artistName.add(Arrays.toString(artistName));
-        this.imageUrl.add(Arrays.toString(imageUrl));
+        this.artistName.addAll(List.of(artistName));
+        this.imageUrl.addAll(List.of(imageUrl));
         this.value = value;
         this.user = user;
     }
 
-    
 }
-
